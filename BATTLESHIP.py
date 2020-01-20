@@ -1,7 +1,7 @@
 import random, sys
-UB=[]
-CB=[]
-TB =  [["0","0","0","0","0","0","0","0","0","0"],
+UB=[]#User's board
+CB=[]#Computer's Board
+TB =  [["0","0","0","0","0","0","0","0","0","0"],#Target Board
       ["0","0","0","0","0","0","0","0","0","0"],
       ["0","0","0","0","0","0","0","0","0","0"],
       ["0","0","0","0","0","0","0","0","0","0"],
@@ -13,28 +13,26 @@ TB =  [["0","0","0","0","0","0","0","0","0","0"],
       ["0","0","0","0","0","0","0","0","0","0"]]
 ship = {'C':["Carrier",5],'B':["Battleship",4],'S':["Submarine",3],'c':["Cruiser",3],'D':["Destroyer",2]}
 symbol = list(ship.keys())
-hit = False
+hit = False#Loop checks
 end = False
 
-def user_set_board():
-    B = [["0","0","0","0","0","0","0","0","0","0"],
-          ["0","0","0","0","0","0","0","0","0","0"],
-          ["0","0","0","0","0","0","0","0","0","0"],
-          ["0","0","0","0","0","0","0","0","0","0"],
-          ["0","0","0","0","0","0","0","0","0","0"],
-          ["0","0","0","0","0","0","0","0","0","0"],
-          ["0","0","0","0","0","0","0","0","0","0"],
-          ["0","0","0","0","0","0","0","0","0","0"],
-          ["0","0","0","0","0","0","0","0","0","0"],
-          ["0","0","0","0","0","0","0","0","0","0"]]
-    
-    k = 0 #Helps in the initialization of user's pieces
-    placed = False    
+def user_set_board():#Fuction to let user set the board
     confirm = False
-    ori =''
-    conf = ''
-    
     while (not confirm):
+        B = [["0","0","0","0","0","0","0","0","0","0"],#Placeholder Board
+             ["0","0","0","0","0","0","0","0","0","0"],
+             ["0","0","0","0","0","0","0","0","0","0"],
+              ["0","0","0","0","0","0","0","0","0","0"],
+              ["0","0","0","0","0","0","0","0","0","0"],
+              ["0","0","0","0","0","0","0","0","0","0"],
+              ["0","0","0","0","0","0","0","0","0","0"],
+              ["0","0","0","0","0","0","0","0","0","0"],
+              ["0","0","0","0","0","0","0","0","0","0"],
+              ["0","0","0","0","0","0","0","0","0","0"]]
+        k = 0 #Helps in the initialization of pieces
+        placed = False#Placement check    
+        ori =''#Orientation of ship
+        conf = ''#Yes or No to Board setup
         for i in range(0,5): 
                 chk=0
                 print("Input ",ship[symbol[i]][0],"\'s coordinates",sep='')
@@ -47,7 +45,7 @@ def user_set_board():
                         
                         if (ori == "h" and ((x+n-1)<10)):
                             for j in range(0,n):
-                                if(B[y][x+j]=="0"):
+                                if(B[y][x+j]=="0"):#Loop to ensure ships do not overlap
                                     chk=chk+1
                             if (chk==n):
                                 for j in range (0,n):
@@ -72,12 +70,12 @@ def user_set_board():
                     else:
                         print("Ship already placed there!")
                 placed = False
-        print("   0     1    2    3    4    5    6    7    8    9")      
+        print("   0     1    2    3    4    5    6    7    8    9")     #Prints board for user 
         rows =0     
         for b in B:
             print(rows,b)
             rows+=1
-        conf=input("Are You Happy With the Board Configuration?(Y/N)")
+        conf=input("Are You Happy With the Board Configuration?(Y/N): ")
         if(conf=="Y"):
             confirm = True
             return B
@@ -85,7 +83,7 @@ def user_set_board():
             confirm = False
             i=0
 def comp_set_board():
-    B = [ ["0","0","0","0","0","0","0","0","0","0"],
+    B = [ ["0","0","0","0","0","0","0","0","0","0"],#Same as above
           ["0","0","0","0","0","0","0","0","0","0"],
           ["0","0","0","0","0","0","0","0","0","0"],
           ["0","0","0","0","0","0","0","0","0","0"],
@@ -95,16 +93,16 @@ def comp_set_board():
           ["0","0","0","0","0","0","0","0","0","0"],
           ["0","0","0","0","0","0","0","0","0","0"],
           ["0","0","0","0","0","0","0","0","0","0"]]
-    k = 0 #Helps in the initialization of user's pieces
-    placed = False    
-    ori =''
+    k = 0 #Same as above
+    placed = False #Same as above
+    ori =''#Same as above
     for i in range(0,5): 
             chk=0
             while(not placed):
-                x = random.randint(0,9)
-                y = random.randint(0,9)
+                x = random.randrange(0,10)#Randomized x coordinate
+                y = random.randrange(0,10)#Randomized y coordinate
                 if (B[y][x]=="0"):
-                    ori = random.randint(0,1)
+                    ori = random.randrange(0,2)
                     n = ship[symbol[i]][1]
                     
                     if (ori == 0 and ((x+n-1)<10)):
@@ -134,16 +132,15 @@ def user_attack(x,y):
         global end
         global CB
         global hit
+        global TB
         if (CB[y][x]=="0"):
-            print ("It missesd at (",x,",",y,") We'll get em next time.",sep='')
-            TB[y][x]=='x'
+            print ("It missed at (",x,",",y,") We'll get em next time.",sep='')
+            TB[y][x]="x"
             hit = True
-            return TB
         elif(CB[y][x] in symbol):
             print("We hit!")
             hcount+=1
-            TB[y][x]="o"
-            hit = True
+            TB[y][x]="o"           
             if (hcount==17):
                 print("***  ***   ********  ***   ***   **      ** ********  *****       ***")
                 print(" **  **    **    **  ***   ***   **      **   ***     *** **      ***")
@@ -155,6 +152,7 @@ def user_attack(x,y):
                 end = True
             else:
                 end = False
+            hit = True
         else:
             print("You've already attacked there. Attack somewhere else.")
         Ret = [end,TB,hit]
@@ -170,6 +168,7 @@ def comp_attack():
             UB[y][x]=='x'
             print("The enemy missed at (",x,",",y,")",sep='')
             hit = True
+            end = False
         elif(UB[y][x] in symbol):
             print("Gah the enemy hit us at (",x,",",y,")",sep='')
             UB[y][x]="o"
@@ -189,19 +188,23 @@ def comp_attack():
         ret = [end,UB,hit]
         return ret
 def main():
+    turn =1
     global end
     global hit
     global TB
     global UB  
     global CB
-    print("*************************BATTLESHIP*********************************")
+    print("*********************************BATTLESHIP*********************************")
     print("1:Start Game")
     print("2:Quit Game")
-    ch = input("Click 1 to begin anything else to quit")
+    ch = input("Click 1 to begin anything else to quit: ")
     if (ch == '1'):
         UB = user_set_board()
+        print("If computer is taking too long to set board it is recommended to restart program.")
         CB = comp_set_board()
+        print("Game begins now!")
         while(not end):
+            print("Turn:",turn)
             hit = False
             print("1:Attack")
             print("2:View Damage Board")
@@ -223,6 +226,7 @@ def main():
                     end=defe[0]
                     UB=defe[1]
                     hit = defe[2]
+                    turn+=1
             elif(c == 2):
                 print("   0     1    2    3    4    5    6    7    8    9")      
                 rows =0     
