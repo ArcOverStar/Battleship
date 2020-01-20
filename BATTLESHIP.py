@@ -155,7 +155,7 @@ def user_attack(x,y):
             hit = True
         else:
             print("You've already attacked there. Attack somewhere else.")
-        Ret = [end,TB,hit]
+        Ret = [end,TB,hit, hcount]
         return Ret
 def comp_attack():
     global end
@@ -173,7 +173,6 @@ def comp_attack():
             print("Gah the enemy hit us at (",x,",",y,")",sep='')
             UB[y][x]="o"
             comphcount+=1
-            hit = True
             if(comphcount==17):
                 print("***  ***   ********  ***   ***   ***       ********  ********  ********")
                 print(" **  **    **    **  ***   ***   ***       **    **  ********  ********")
@@ -185,7 +184,8 @@ def comp_attack():
                 end = True
             else:
                 end = False
-        ret = [end,UB,hit]
+            hit = True
+        ret = [end,UB,hit,comphcount]
         return ret
 def main():
     turn =1
@@ -194,6 +194,8 @@ def main():
     global TB
     global UB  
     global CB
+    uhcount = 0
+    chcount = 0
     print("*********************************BATTLESHIP*********************************")
     print("1:Start Game")
     print("2:Quit Game")
@@ -210,7 +212,8 @@ def main():
             print("2:View Damage Board")
             print("3:View Target Board")
             print("4:View Symbol Key")
-            print("5:Quit Game")
+            print("5:View Hit Counts")
+            print("6:Quit Game")
             c = int(input("Choose an action: "))
             if (c == 1):
                 print ("Input Enter Target Coordinates")
@@ -218,14 +221,10 @@ def main():
                     a = int(input("Enter x coordinate(0-9): "))
                     b = int (input("Enter y coordinate(0-9): "))
                     strike = user_attack(a,b)
-                    end = strike[0]
-                    hit=strike[2]
-                    TB = strike[1]
+                    end,hit,TB,uhcount = strike[0],strike[1],strike[2],strike[3]
                     hit = False
                     defe = comp_attack()
-                    end=defe[0]
-                    UB=defe[1]
-                    hit = defe[2]
+                    end,UB,hit,chcount=defe[0],defe[1],defe[2],defe[3]
                     turn+=1
             elif(c == 2):
                 print("   0     1    2    3    4    5    6    7    8    9")      
@@ -246,6 +245,9 @@ def main():
                 print("o - Miss")
                 print("0 - Untargeted Space")
             elif(c==5):
+                print("User Hit Count -",uhcount)
+                print("Computer Hit Count -",chcount)
+            elif(c==6):
                 sys.exit()
     else:
         sys.exit()
