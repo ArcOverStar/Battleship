@@ -135,12 +135,12 @@ def user_attack(x,y):
         global TB
         if (CB[y][x]=="0"):
             print ("It missed at (",x,",",y,") We'll get em next time.",sep='')
-            TB[y][x]="x"
+            TB[y][x]= 'x'
             hit = True
         elif(CB[y][x] in symbol):
-            print("We hit!")
+            print("We hit!")           
+            TB[y][x]= 'o' 
             hcount+=1
-            TB[y][x]="o"           
             if (hcount==17):
                 print("***  ***   ********  ***   ***   **      ** ********  *****       ***")
                 print(" **  **    **    **  ***   ***   **      **   ***     *** **      ***")
@@ -164,27 +164,28 @@ def comp_attack():
     comphcount=0
     while (not hit):
         x,y=random.randint(0,9),random.randint(0,9)
-        if (UB[y][x]=="0"):
-            UB[y][x]=='x'
-            print("The enemy missed at (",x,",",y,")",sep='')
-            hit = True
-            end = False
-        elif(UB[y][x] in symbol):
-            print("Gah the enemy hit us at (",x,",",y,")",sep='')
-            UB[y][x]="o"
-            comphcount+=1
-            if(comphcount==17):
-                print("***  ***   ********  ***   ***   ***       ********  ********  ********")
-                print(" **  **    **    **  ***   ***   ***       **    **  ********  ********")
-                print("   **      **    **  ***   ***   ***       **    **  **        **")
-                print("   **      **    **  ***   ***   ***       **    **  ********  ********")
-                print("   **      **    **  ***   ***   ***       **    **        **  **")
-                print("   **      **    **  *********   ***       **    **  ********  ********")
-                print("   **      ********  *********   ********  ********  ********  ********")
-                end = True
-            else:
+        if (UB[y][x]!="x" or UB[y][x]!="o"):
+            if (UB[y][x]=="0"):
+                UB[y][x]='x'
+                print("The enemy missed at (",x,",",y,")",sep='')
+                hit = True
                 end = False
-            hit = True
+            elif(UB[y][x] in symbol):
+                print("Gah the enemy hit us at (",x,",",y,")",sep='')
+                UB[y][x]="o"
+                comphcount+=1
+                if(comphcount==17):
+                    print("***  ***   ********  ***   ***   ***       ********  ********  ********")
+                    print(" **  **    **    **  ***   ***   ***       **    **  ********  ********")
+                    print("   **      **    **  ***   ***   ***       **    **  **        **")
+                    print("   **      **    **  ***   ***   ***       **    **  ********  ********")
+                    print("   **      **    **  ***   ***   ***       **    **        **  **")
+                    print("   **      **    **  *********   ***       **    **  ********  ********")
+                    print("   **      ********  *********   ********  ********  ********  ********")
+                    end = True
+                else:
+                    end = False
+                hit = True
         ret = [end,UB,hit,comphcount]
         return ret
 def main():
@@ -221,7 +222,7 @@ def main():
                     a = int(input("Enter x coordinate(0-9): "))
                     b = int (input("Enter y coordinate(0-9): "))
                     strike = user_attack(a,b)
-                    end,hit,TB,uhcount = strike[0],strike[1],strike[2],strike[3]
+                    end,TB,hit,uhcount = strike[0],strike[1],strike[2],strike[3]
                     hit = False
                     defe = comp_attack()
                     end,UB,hit,chcount=defe[0],defe[1],defe[2],defe[3]
@@ -234,7 +235,7 @@ def main():
                     rows+=1
             elif (c==3):
                 print("   0     1    2    3    4    5    6    7    8    9")      
-                rows =0     
+                rows = 0     
                 for b in TB:
                     print(rows,b)
                     rows+=1
